@@ -90,7 +90,7 @@ function AppContent() {
           isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
         }`}
       >
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {error && (
             <div
               className={`mb-6 p-4 border rounded-lg ${

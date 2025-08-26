@@ -9,7 +9,7 @@ export const TaskStatsComponent: React.FC<TaskStatsProps> = ({ stats }) => {
   const { isDarkMode } = useDarkMode();
   return (
     <div className="mb-6">
-      <div className="flex items-center gap-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8">
         <div className="flex items-center gap-2">
           <span
             className={`text-2xl font-bold ${

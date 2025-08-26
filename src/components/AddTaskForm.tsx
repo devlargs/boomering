@@ -85,7 +85,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1">
             <input
               type="text"
@@ -102,7 +102,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
             />
           </div>
 
-          <div className="w-32" ref={dropdownRef}>
+          <div className="w-full sm:w-32" ref={dropdownRef}>
             <Dropdown
               options={priorityOptions}
               value={priority}
@@ -116,7 +116,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
           <button
             type="submit"
             disabled={isLoading || !description.trim()}
-            className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full sm:w-auto px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? "Adding..." : "Add"}
           </button>

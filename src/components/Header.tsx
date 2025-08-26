@@ -8,9 +8,9 @@ export const Header = () => {
         isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
       }`}
     >
-      <div className="max-w-4xl mx-auto px-4 py-4">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-xl font-bold mb-2">Todo List</h1>
+          <h1 className="text-lg sm:text-xl font-bold mb-2">Todo List</h1>
           <button
             onClick={toggleDarkMode}
             className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-0 focus:shadow-none ${

@@ -55,7 +55,7 @@ export const TaskList: React.FC<TaskListProps> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-6">
         <h2
           className={`text-xl font-semibold ${
             isDarkMode ? "text-gray-200" : "text-gray-800"
@@ -72,7 +72,7 @@ export const TaskList: React.FC<TaskListProps> = ({
             isOpen={isDropdownOpen}
             onToggle={toggleDropdown}
             placeholder="Sort by"
-            className="w-48"
+            className="w-full sm:w-48"
           />
         </div>
       </div>

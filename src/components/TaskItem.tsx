@@ -26,7 +26,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
 
   return (
     <div
-      className={`flex items-center justify-between p-4 border rounded-lg shadow-sm ${
+      className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg shadow-sm gap-3 sm:gap-0 ${
         isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
       }`}
     >
@@ -59,7 +59,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 sm:ml-4">
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${priorityConfig.bgColor} ${priorityConfig.textColor} ${priorityConfig.borderColor} border`}
         >
