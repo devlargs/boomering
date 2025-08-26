@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useDarkMode } from "../contexts/DarkModeContext";
 import type { Priority } from "../types/Task";
 import { validateTask } from "../utils/taskUtils";
-import Dropdown from "./Dropdown";
 import type { DropdownOption } from "./Dropdown";
+import Dropdown from "./Dropdown";
 
 interface AddTaskFormProps {
   onAddTask: (description: string, priority: Priority) => void;
@@ -13,6 +14,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
   onAddTask,
   isLoading = false,
 }) => {
+  const { isDarkMode } = useDarkMode();
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +76,11 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
 
   return (
     <div className="mb-6">
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      <h2
+        className={`text-xl font-semibold mb-4 ${
+          isDarkMode ? "text-gray-200" : "text-gray-800"
+        }`}
+      >
         + Add New Task
       </h2>
 
@@ -87,7 +93,11 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Enter task description..."
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-600 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors placeholder-gray-400"
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-colors ${
+                isDarkMode
+                  ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                  : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+              }`}
               disabled={isLoading}
             />
           </div>
@@ -106,14 +116,20 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
           <button
             type="submit"
             disabled={isLoading || !description.trim()}
-            className="px-6 py-2 bg-gray-700 text-white font-medium rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? "Adding..." : "Add"}
           </button>
         </div>
 
         {error && (
-          <div className="text-red-400 text-sm bg-red-900/20 p-3 rounded-lg border border-red-700">
+          <div
+            className={`text-sm p-3 rounded-lg border ${
+              isDarkMode
+                ? "text-red-400 bg-red-900/20 border-red-700"
+                : "text-red-600 bg-red-50 border-red-200"
+            }`}
+          >
             {error}
           </div>
         )}

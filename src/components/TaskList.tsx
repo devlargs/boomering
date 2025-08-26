@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
-import type { Task, SortOption } from "../types/Task";
-import { TaskItem } from "./TaskItem";
+import { useEffect, useRef, useState } from "react";
+import { useDarkMode } from "../contexts/DarkModeContext";
+import type { SortOption, Task } from "../types/Task";
 import { sortTasks } from "../utils/taskUtils";
-import Dropdown from "./Dropdown";
 import type { DropdownOption } from "./Dropdown";
+import Dropdown from "./Dropdown";
+import { TaskItem } from "./TaskItem";
 
 interface TaskListProps {
   tasks: Task[];
@@ -16,6 +17,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   onToggleComplete,
   onDelete,
 }) => {
+  const { isDarkMode } = useDarkMode();
   const [sortBy, setSortBy] = useState<SortOption>("created");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -54,7 +56,13 @@ export const TaskList: React.FC<TaskListProps> = ({
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-100">Your Tasks</h2>
+        <h2
+          className={`text-xl font-semibold ${
+            isDarkMode ? "text-gray-200" : "text-gray-800"
+          }`}
+        >
+          Your Tasks
+        </h2>
 
         <div ref={dropdownRef}>
           <Dropdown
@@ -69,11 +77,17 @@ export const TaskList: React.FC<TaskListProps> = ({
         </div>
       </div>
 
-      <div className="bg-gray-800 rounded-lg border border-gray-700">
+      <div className="space-y-3">
         {sortedTasks.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
+          <div
+            className={`text-center py-8 ${
+              isDarkMode ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
             <svg
-              className="w-12 h-12 mx-auto mb-4 text-gray-600"
+              className={`w-12 h-12 mx-auto mb-4 ${
+                isDarkMode ? "text-gray-500" : "text-gray-400"
+              }`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

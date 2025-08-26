@@ -29,22 +29,22 @@ export const sortTasks = (tasks: Task[], sortBy: SortOption): Task[] => {
 export const getPriorityConfig = (priority: Priority) => {
     const configs = {
         low: {
-            bgColor: 'bg-blue-900/30',
-            textColor: 'text-blue-300',
+            bgColor: 'bg-blue-100',
+            textColor: 'text-blue-700',
             dotColor: 'bg-blue-500',
-            borderColor: 'border-blue-600',
+            borderColor: 'border-blue-200',
         },
         medium: {
-            bgColor: 'bg-green-900/30',
-            textColor: 'text-green-300',
+            bgColor: 'bg-green-100',
+            textColor: 'text-green-700',
             dotColor: 'bg-green-500',
-            borderColor: 'border-green-600',
+            borderColor: 'border-green-200',
         },
         high: {
-            bgColor: 'bg-red-900/30',
-            textColor: 'text-red-300',
+            bgColor: 'bg-red-100',
+            textColor: 'text-red-700',
             dotColor: 'bg-red-500',
-            borderColor: 'border-red-600',
+            borderColor: 'border-red-200',
         },
     };
 

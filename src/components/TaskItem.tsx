@@ -1,3 +1,4 @@
+import { useDarkMode } from "../contexts/DarkModeContext";
 import type { Task } from "../types/Task";
 import { getPriorityConfig } from "../utils/taskUtils";
 
@@ -12,6 +13,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
   onToggleComplete,
   onDelete,
 }) => {
+  const { isDarkMode } = useDarkMode();
   const priorityConfig = getPriorityConfig(task.priority);
 
   const handleToggleComplete = () => {
@@ -23,22 +25,39 @@ export const TaskItem: React.FC<TaskItemProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-between p-3 border-b border-gray-700 last:border-b-0">
+    <div
+      className={`flex items-center justify-between p-4 border rounded-lg shadow-sm ${
+        isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+      }`}
+    >
       <div className="flex items-center gap-3 flex-1">
         <input
           type="checkbox"
           checked={task.completed}
           onChange={handleToggleComplete}
-          className="w-5 h-5 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer"
+          className={`w-5 h-5 text-green-600 rounded focus:ring-green-500 focus:ring-2 cursor-pointer ${
+            isDarkMode
+              ? "bg-gray-700 border-gray-600"
+              : "bg-white border-gray-300"
+          }`}
         />
 
-        <span
-          className={`flex-1 text-gray-100 ${
-            task.completed ? "line-through text-gray-500" : ""
-          }`}
-        >
-          {task.description}
-        </span>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          <span
+            className={`flex-1 ${
+              task.completed
+                ? isDarkMode
+                  ? "line-through text-gray-400"
+                  : "line-through text-gray-500"
+                : isDarkMode
+                ? "text-gray-200"
+                : "text-gray-800"
+            }`}
+          >
+            {task.description}
+          </span>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">
@@ -50,7 +69,11 @@ export const TaskItem: React.FC<TaskItemProps> = ({
 
         <button
           onClick={handleDelete}
-          className="p-1 text-gray-400 hover:text-red-400 hover:bg-red-900/20 rounded transition-colors"
+          className={`p-1 rounded transition-colors ${
+            isDarkMode
+              ? "text-gray-400 hover:text-red-400 hover:bg-red-900/20"
+              : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+          }`}
           title="Delete task"
         >
           <svg

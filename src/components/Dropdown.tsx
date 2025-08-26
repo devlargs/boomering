@@ -1,4 +1,5 @@
 import React from "react";
+import { useDarkMode } from "../contexts/DarkModeContext";
 
 export interface DropdownOption {
   value: string;
@@ -24,6 +25,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   placeholder = "Select option",
   className = "",
 }) => {
+  const { isDarkMode } = useDarkMode();
   const selectedOption = options.find((option) => option.value === value);
 
   return (
@@ -31,10 +33,24 @@ const Dropdown: React.FC<DropdownProps> = ({
       <button
         type="button"
         onClick={onToggle}
-        className="w-full px-4 py-2 text-left bg-gray-700 border border-gray-600 rounded-lg text-gray-100 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+        className={`w-full px-4 py-2 text-left border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors ${
+          isDarkMode
+            ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+            : "bg-white border-gray-300 text-gray-800 hover:bg-gray-50"
+        }`}
       >
         <div className="flex items-center justify-between">
-          <span className={selectedOption ? "text-gray-100" : "text-gray-400"}>
+          <span
+            className={
+              selectedOption
+                ? isDarkMode
+                  ? "text-white"
+                  : "text-gray-800"
+                : isDarkMode
+                ? "text-gray-400"
+                : "text-gray-500"
+            }
+          >
             {selectedOption ? selectedOption.label : placeholder}
           </span>
           <svg
@@ -54,7 +70,13 @@ const Dropdown: React.FC<DropdownProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-20 overflow-hidden">
+        <div
+          className={`absolute top-full left-0 right-0 mt-1 border rounded-lg shadow-lg z-20 overflow-hidden ${
+            isDarkMode
+              ? "bg-gray-700 border-gray-600"
+              : "bg-white border-gray-300"
+          }`}
+        >
           {options.map((option) => (
             <button
               key={option.value}
@@ -63,10 +85,12 @@ const Dropdown: React.FC<DropdownProps> = ({
                 onChange(option.value);
                 onToggle();
               }}
-              className={`w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors border-0 outline-none focus:outline-none focus:ring-0 focus:border-0 rounded-none ${
+              className={`w-full text-left px-4 py-2 transition-colors border-0 outline-none focus:outline-none focus:ring-0 focus:border-0 rounded-none ${
                 value === option.value
-                  ? "bg-blue-600 text-white hover:bg-blue-700"
-                  : "text-gray-100"
+                  ? "bg-green-600 text-white hover:bg-green-700"
+                  : isDarkMode
+                  ? "text-gray-200 hover:bg-gray-600"
+                  : "text-gray-800 hover:bg-gray-50"
               }`}
             >
               <div className="flex items-center justify-between">
