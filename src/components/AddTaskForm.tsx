@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Priority } from "../types/Task";
 import { validateTask } from "../utils/taskUtils";
+import Dropdown from "./Dropdown";
+import type { DropdownOption } from "./Dropdown";
 
 interface AddTaskFormProps {
   onAddTask: (description: string, priority: Priority) => void;
@@ -14,6 +16,33 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");
   const [error, setError] = useState<string | null>(null);
+  const [isPriorityDropdownOpen, setIsPriorityDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const priorityOptions: DropdownOption[] = [
+    { value: "low", label: "Low" },
+    { value: "medium", label: "Medium" },
+    { value: "high", label: "High" },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsPriorityDropdownOpen(false);
+      }
+    };
+
+    if (isPriorityDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isPriorityDropdownOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +68,10 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
     }
   };
 
+  const togglePriorityDropdown = () => {
+    setIsPriorityDropdownOpen(!isPriorityDropdownOpen);
+  };
+
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold text-gray-100 mb-4">
@@ -59,17 +92,15 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
             />
           </div>
 
-          <div className="w-32">
-            <select
+          <div className="w-32" ref={dropdownRef}>
+            <Dropdown
+              options={priorityOptions}
               value={priority}
-              onChange={(e) => setPriority(e.target.value as Priority)}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-600 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors"
-              disabled={isLoading}
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
+              onChange={(value) => setPriority(value as Priority)}
+              isOpen={isPriorityDropdownOpen}
+              onToggle={togglePriorityDropdown}
+              placeholder="Priority"
+            />
           </div>
 
           <button

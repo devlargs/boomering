@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Task, SortOption } from "../types/Task";
 import { TaskItem } from "./TaskItem";
-import { sortTasks, getSortOptionText } from "../utils/taskUtils";
+import { sortTasks } from "../utils/taskUtils";
+import Dropdown from "./Dropdown";
+import type { DropdownOption } from "./Dropdown";
 
 interface TaskListProps {
   tasks: Task[];
@@ -16,13 +18,34 @@ export const TaskList: React.FC<TaskListProps> = ({
 }) => {
   const [sortBy, setSortBy] = useState<SortOption>("created");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const sortOptions: DropdownOption[] = [
+    { value: "created", label: "Date Created" },
+    { value: "priority", label: "Priority" },
+    { value: "name", label: "Name" },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   const sortedTasks = sortTasks(tasks, sortBy);
-
-  const handleSortChange = (newSortBy: SortOption) => {
-    setSortBy(newSortBy);
-    setIsDropdownOpen(false);
-  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -33,63 +56,16 @@ export const TaskList: React.FC<TaskListProps> = ({
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Your Tasks</h2>
 
-        <div className="relative">
-          <button
-            onClick={toggleDropdown}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-800 border border-gray-600 text-gray-100 rounded-lg hover:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-          >
-            <span>{getSortOptionText(sortBy)}</span>
-            <svg
-              className={`w-4 h-4 text-gray-400 transition-transform ${
-                isDropdownOpen ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-10">
-              {(["created", "priority", "name"] as SortOption[]).map(
-                (option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleSortChange(option)}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors ${
-                      sortBy === option
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
-                        : "text-gray-100"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span>{getSortOptionText(option)}</span>
-                      {sortBy === option && (
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                    </div>
-                  </button>
-                )
-              )}
-            </div>
-          )}
+        <div ref={dropdownRef}>
+          <Dropdown
+            options={sortOptions}
+            value={sortBy}
+            onChange={(value) => setSortBy(value as SortOption)}
+            isOpen={isDropdownOpen}
+            onToggle={toggleDropdown}
+            placeholder="Sort by"
+            className="w-48"
+          />
         </div>
       </div>
 

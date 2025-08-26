@@ -7,9 +7,9 @@
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
-    color-scheme: light dark;
+    color-scheme: dark;
     color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+    background-color: #111827;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -25,25 +25,15 @@
 
 @layer components {
   button {
-    @apply rounded-lg border border-transparent px-5 py-2.5 text-base font-medium font-inherit bg-gray-800 cursor-pointer transition-colors duration-250;
+    @apply rounded-lg border border-transparent px-5 py-2.5 text-base font-medium bg-gray-700 text-white cursor-pointer transition-colors duration-200;
   }
 
   button:hover {
-    @apply border-blue-500;
+    @apply border-blue-500 bg-gray-600;
   }
 
   button:focus,
   button:focus-visible {
     @apply outline-none ring-4 ring-blue-500 ring-opacity-50;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    @apply text-gray-900 bg-white;
-  }
-
-  button {
-    @apply bg-gray-100;
   }
 }
