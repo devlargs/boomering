@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DarkModeProvider } from "../../contexts/DarkModeContext";
 import { AddTaskForm } from "../AddTaskForm";
 
@@ -56,7 +56,6 @@ describe("AddTaskForm", () => {
     renderWithProvider(<AddTaskForm onAddTask={mockOnAddTask} />);
 
     const input = screen.getByPlaceholderText("Enter task description...");
-    // Press Enter on empty input triggers validation
     fireEvent.keyDown(input, { key: "Enter", code: "Enter" });
 
     await waitFor(() => {
@@ -74,7 +73,6 @@ describe("AddTaskForm", () => {
     const input = screen.getByPlaceholderText("Enter task description...");
 
     fireEvent.change(input, { target: { value: "   " } });
-    // Press Enter to submit and trigger validation
     fireEvent.keyDown(input, { key: "Enter", code: "Enter" });
 
     await waitFor(() => {

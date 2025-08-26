@@ -29,9 +29,8 @@ function AppContent() {
       setError(null);
       const loadedTasks = await getAllTasks();
       setTasks(loadedTasks);
-    } catch (err) {
+    } catch {
       setError("Failed to load tasks. Please refresh the page.");
-      console.error("Error loading tasks:", err);
     } finally {
       setIsLoading(false);
     }
@@ -46,9 +45,8 @@ function AppContent() {
         completed: false,
       });
       setTasks((prevTasks) => [...prevTasks, newTask]);
-    } catch (err) {
+    } catch {
       setError("Failed to add task. Please try again.");
-      console.error("Error adding task:", err);
     }
   };
 
@@ -67,9 +65,8 @@ function AppContent() {
       setTasks((prevTasks) =>
         prevTasks.map((task) => (task.id === taskId ? updatedTask : task))
       );
-    } catch (err) {
+    } catch {
       setError("Failed to update task. Please try again.");
-      console.error("Error updating task:", err);
     }
   };
 
@@ -78,9 +75,8 @@ function AppContent() {
       setError(null);
       await deleteTask(taskId);
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-    } catch (err) {
+    } catch {
       setError("Failed to delete task. Please try again.");
-      console.error("Error deleting task:", err);
     }
   };
 

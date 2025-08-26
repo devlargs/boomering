@@ -20,7 +20,9 @@ describe("TaskStatsComponent", () => {
       <TaskStatsComponent stats={stats} />
     );
 
-    const sections = container.querySelectorAll(".flex.items-center.gap-2");
+    const sections = container.querySelectorAll<HTMLElement>(
+      ".flex.items-center.gap-2"
+    );
     expect(within(sections[0]).getByText("10")).toBeInTheDocument();
     expect(within(sections[1]).getByText("6")).toBeInTheDocument();
     expect(within(sections[2]).getByText("4")).toBeInTheDocument();
@@ -37,7 +39,9 @@ describe("TaskStatsComponent", () => {
       <TaskStatsComponent stats={stats} />
     );
 
-    const sections = container.querySelectorAll(".flex.items-center.gap-2");
+    const sections = container.querySelectorAll<HTMLElement>(
+      ".flex.items-center.gap-2"
+    );
     expect(within(sections[0]).getByText("0")).toBeInTheDocument();
     expect(within(sections[1]).getByText("0")).toBeInTheDocument();
     expect(within(sections[2]).getByText("0")).toBeInTheDocument();
@@ -54,7 +58,9 @@ describe("TaskStatsComponent", () => {
       <TaskStatsComponent stats={stats} />
     );
 
-    const sections = container.querySelectorAll(".flex.items-center.gap-2");
+    const sections = container.querySelectorAll<HTMLElement>(
+      ".flex.items-center.gap-2"
+    );
     expect(within(sections[0]).getByText("5")).toBeInTheDocument();
     expect(within(sections[1]).getByText("5")).toBeInTheDocument();
     expect(within(sections[2]).getByText("0")).toBeInTheDocument();
@@ -71,7 +77,9 @@ describe("TaskStatsComponent", () => {
       <TaskStatsComponent stats={stats} />
     );
 
-    const sections = container.querySelectorAll(".flex.items-center.gap-2");
+    const sections = container.querySelectorAll<HTMLElement>(
+      ".flex.items-center.gap-2"
+    );
     expect(within(sections[0]).getByText("3")).toBeInTheDocument();
     expect(within(sections[1]).getByText("0")).toBeInTheDocument();
     expect(within(sections[2]).getByText("3")).toBeInTheDocument();
