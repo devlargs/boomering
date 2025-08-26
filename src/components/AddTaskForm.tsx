@@ -63,10 +63,10 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
     setPriority("medium");
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e);
+      handleSubmit(e as unknown as React.FormEvent);
     }
   };
 
@@ -91,7 +91,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
               placeholder="Enter task description..."
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-colors ${
                 isDarkMode

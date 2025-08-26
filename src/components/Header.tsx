@@ -10,7 +10,7 @@ export const Header = () => {
     >
       <div className="max-w-4xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-xl font-bold mb-2">Task Manager</h1>
+          <h1 className="text-xl font-bold mb-2">Todo List</h1>
           <button
             onClick={toggleDarkMode}
             className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-0 focus:shadow-none ${
