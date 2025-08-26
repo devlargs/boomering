@@ -1,59 +1,137 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState, useEffect } from "react";
+import type { Task, Priority } from "./types/Task";
+import { TaskStatsComponent } from "./components/TaskStats";
+import { AddTaskForm } from "./components/AddTaskForm";
+import { TaskList } from "./components/TaskList";
+import {
+  getAllTasks,
+  addTask,
+  updateTask,
+  deleteTask,
+} from "./utils/indexedDB";
+import { calculateTaskStats } from "./utils/taskUtils";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  const loadTasks = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const loadedTasks = await getAllTasks();
+      setTasks(loadedTasks);
+    } catch (err) {
+      setError("Failed to load tasks. Please refresh the page.");
+      console.error("Error loading tasks:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddTask = async (description: string, priority: Priority) => {
+    try {
+      setError(null);
+      const newTask = await addTask({
+        description,
+        priority,
+        completed: false,
+      });
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+    } catch (err) {
+      setError("Failed to add task. Please try again.");
+      console.error("Error adding task:", err);
+    }
+  };
+
+  const handleToggleComplete = async (taskId: string) => {
+    try {
+      setError(null);
+      const taskToUpdate = tasks.find((task) => task.id === taskId);
+      if (!taskToUpdate) return;
+
+      const updatedTask = {
+        ...taskToUpdate,
+        completed: !taskToUpdate.completed,
+      };
+      await updateTask(updatedTask);
+
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === taskId ? updatedTask : task))
+      );
+    } catch (err) {
+      setError("Failed to update task. Please try again.");
+      console.error("Error updating task:", err);
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      setError(null);
+      await deleteTask(taskId);
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    } catch (err) {
+      setError("Failed to delete task. Please try again.");
+      console.error("Error deleting task:", err);
+    }
+  };
+
+  const stats = calculateTaskStats(tasks);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-      <div className="max-w-4xl mx-auto text-center">
-        <div className="flex justify-center items-center gap-8 mb-8">
-          <a href="https://vite.dev" target="_blank" className="group">
-            <img
-              src={viteLogo}
-              className="h-24 w-24 p-6 transition-all duration-300 group-hover:drop-shadow-[0_0_2em_#646cffaa] group-hover:scale-110"
-              alt="Vite logo"
-            />
-          </a>
-          <a href="https://react.dev" target="_blank" className="group">
-            <img
-              src={reactLogo}
-              className="h-24 w-24 p-6 transition-all duration-300 group-hover:drop-shadow-[0_0_2em_#61dafbaa] group-hover:scale-110 animate-spin"
-              alt="React logo"
-            />
-          </a>
-        </div>
-
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-8">
-          Vite + React + Tailwind
-        </h1>
-
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/20 dark:border-gray-700/20">
-          <button
-            onClick={() => setCount((count) => count + 1)}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg mb-4"
-          >
-            Count is {count}
-          </button>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">
-            Edit{" "}
-            <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm font-mono">
-              src/App.tsx
-            </code>{" "}
-            and save to test HMR
+    <div className="min-h-screen bg-gray-900 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-100 mb-2">
+            Task Manager
+          </h1>
+          <p className="text-gray-400">
+            Organize your tasks efficiently with priority management
           </p>
         </div>
 
-        <p className="text-gray-500 dark:text-gray-400 mt-8 text-sm">
-          Click on the Vite and React logos to learn more
-        </p>
+        {error && (
+          <div className="mb-6 p-4 bg-red-900/20 border border-red-700 rounded-lg">
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-5 h-5 text-red-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="text-red-300 font-medium">{error}</span>
+            </div>
+          </div>
+        )}
 
-        <div className="mt-8 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <p className="text-green-800 dark:text-green-200 font-medium">
-            ✅ Tailwind CSS is now set up and working!
-          </p>
-        </div>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+            <p className="mt-2 text-gray-400">Loading tasks...</p>
+          </div>
+        ) : (
+          <>
+            <TaskStatsComponent stats={stats} />
+
+            <AddTaskForm onAddTask={handleAddTask} isLoading={isLoading} />
+
+            <TaskList
+              tasks={tasks}
+              onToggleComplete={handleToggleComplete}
+              onDelete={handleDeleteTask}
+            />
+          </>
+        )}
       </div>
     </div>
   );
