@@ -13,7 +13,7 @@ export const Header = () => {
           <h1 className="text-xl font-bold mb-2">Task Manager</h1>
           <button
             onClick={toggleDarkMode}
-            className={`p-2 rounded-lg transition-colors duration-200 ${
+            className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-0 focus:shadow-none ${
               isDarkMode
                 ? "bg-gray-700 hover:bg-gray-600 text-yellow-400"
                 : "bg-gray-100 hover:bg-gray-200 text-gray-700"

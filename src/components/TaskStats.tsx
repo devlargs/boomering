@@ -11,7 +11,11 @@ export const TaskStatsComponent: React.FC<TaskStatsProps> = ({ stats }) => {
     <div className="mb-6">
       <div className="flex items-center gap-8">
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-green-600">
+          <span
+            className={`text-2xl font-bold ${
+              isDarkMode ? "text-gray-200" : "text-gray-800"
+            }`}
+          >
             {stats.total}
           </span>
           <span className={isDarkMode ? "text-gray-300" : "text-gray-700"}>
@@ -20,11 +24,7 @@ export const TaskStatsComponent: React.FC<TaskStatsProps> = ({ stats }) => {
         </div>
 
         <div className="flex items-center gap-2">
-          <span
-            className={`text-2xl font-bold ${
-              isDarkMode ? "text-gray-200" : "text-gray-800"
-            }`}
-          >
+          <span className="text-2xl font-bold text-green-600">
             {stats.completed}
           </span>
           <span className={isDarkMode ? "text-gray-300" : "text-gray-700"}>

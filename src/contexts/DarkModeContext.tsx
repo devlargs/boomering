@@ -9,6 +9,7 @@ const DarkModeContext = createContext<DarkModeContextType | undefined>(
   undefined
 );
 
+// eslint-disable-next-line
 export const useDarkMode = () => {
   const context = useContext(DarkModeContext);
   if (context === undefined) {
